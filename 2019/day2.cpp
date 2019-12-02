@@ -8,16 +8,15 @@ int main()
   std::ifstream fs;
   fs.open(fileName);
 
-	if (!fs)
-	{
-		std::cerr << "File: " << fileName << " could not be opened";
-		exit(1);
-	}
+  if (!fs)
+  {
+    std::cerr << "File: " << fileName << " could not be opened";
+    exit(1);
+  }
 
   std::vector<int> v;
   std::string s;
   v.reserve(1000);
-  // std::copy(std::istream_iterator<int>(fs), std::istream_iterator<int>(), std::back_inserter(v));
   while (std::getline(fs, s, ','))
   {
     v.push_back(std::stoi(s));
@@ -27,7 +26,6 @@ int main()
   int addCode  = { 1 };
   int mulCode  = { 2 };
   int vSize    = v.size();
-
 
   std::vector<int> vp1;
   vp1 = v;
@@ -80,7 +78,7 @@ int main()
     {
       c1 += 1;
     }
-    if (c1 == 99 && c2 == 99)
+    if (c1 == 100 && c2 == 100)
     {
       std::cout << "ERROR" << std::endl;
       break;
@@ -88,7 +86,7 @@ int main()
 
     vp2[1] = c1;
     vp2[2] = c2;
-    
+
     for(int i=0; i < vSize; i++)
     {
       int opCode = vp2[i];
