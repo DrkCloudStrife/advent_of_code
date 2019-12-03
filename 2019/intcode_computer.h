@@ -1,7 +1,5 @@
 #pragma once
-#include <iostream>
-#include <fstream>
-#include <vector>
+#include "common.h"
 
 #ifndef INTCODE_COMP_H
 #define INTCODE_COMP_H
@@ -39,11 +37,11 @@ IntcodeComputer::IntcodeComputer(std::string file)
 {
   fs.open(file);
 
-	if (!fs)
-	{
-		std::cerr << "File: " << file << " could not be opened";
-		exit(1);
-	}
+  if (!fs)
+  {
+    std::cerr << "File: " << file << " could not be opened";
+    exit(1);
+  }
 
   std::string s;
   while (std::getline(fs, s, ','))
