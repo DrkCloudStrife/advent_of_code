@@ -3,9 +3,9 @@
 #include <sstream>
 #include <unordered_set>
 
-std::vector<int *> intersection(std::vector<int *> &v1, std::vector<int *> &v2)
+std::vector<std::string> intersection(std::vector<std::string> &v1, std::vector<std::string> &v2)
 {
-  std::vector<int *> v3;
+  std::vector<std::string> v3;
 
   std::sort(v1.begin(), v1.end());
   std::sort(v2.begin(), v2.end());
@@ -15,18 +15,29 @@ std::vector<int *> intersection(std::vector<int *> &v1, std::vector<int *> &v2)
     back_inserter(v3)
   );
 
-  std::vector<int *>::iterator ip;
+  std::vector<std::string>::iterator ip;
   ip = std::unique(v3.begin(), v3.end());
   v3.resize(std::distance(v3.begin(), ip));
 
   return v3;
 }
 
+std::vector<std::string> split(const std::string& s, char delimiter)
+{
+   std::vector<std::string> tokens;
+   std::string token;
+   std::istringstream ss(s);
+   while (std::getline(ss, token, delimiter))
+   {
+      tokens.push_back(token);
+   }
+   return tokens;
+}
+
 int main()
 {
   std::ifstream fs;
-  // std::string file = "day3.txt";
-  std::string file = "day3_test.txt";
+  std::string file = "day3.txt";
   fs.open(file);
 
   if (!fs)
@@ -51,7 +62,7 @@ int main()
   }
 
   int vsSize = vs.size();
-  std::vector<std::vector<int *> > wires;
+  std::vector<std::vector<std::string> > wires;
   wires.reserve(1000);
   int px = { 0 };
   int py = { 0 };
@@ -71,53 +82,55 @@ int main()
       {
         for(int k=0; k < dist; k++)
         {
-          int arr[2] = {px, py++};
-          wires[i].push_back(arr);
+          std::string pos = std::to_string(px) + "," + std::to_string(py++);// {px, py++};
+          wires[i].push_back(pos);
         }
       }
       else if (dir == "D")
       {
         for(int k=0; k < dist; k++)
         {
-          int arr[2] = {px, py--};
-          wires[i].push_back(arr);
+          std::string pos = std::to_string(px) + "," + std::to_string(py--);
+          wires[i].push_back(pos);
         }
       }
       else if (dir == "R")
       {
         for(int k=0; k < dist; k++)
         {
-          int arr[2] = {px++, py};
-          wires[i].push_back(arr);
+          std::string pos = std::to_string(px++) + "," + std::to_string(py);
+          wires[i].push_back(pos);
         }
       }
       else if (dir == "L")
       {
         for(int k=0; k < dist; k++)
         {
-          int arr[2] = {px--, py};
-          wires[i].push_back(arr);
+          std::string pos = std::to_string(px--) + "," + std::to_string(py);
+          wires[i].push_back(pos);
         }
       }
       else
         continue; // skip
-      std::cout << px << "," << py << std::endl;
     }
-    std::cout << "====" << std::endl;
   }
 
   //p1
-  std::vector<int *> v3 = intersection(wires[0], wires[1]);
+  std::vector<std::string> v3 = intersection(wires[0], wires[1]);
   int output = { 0 };
   for(int i=0; i < v3.size(); i++)
   {
-    std::cout << v3[i][0] << "," << v3[i][1] << std::endl;
-    int m_dist = v3[i][0] + v3[i][1];
-    // std::cout << m_dist << std::endl;
+    std::vector<std::string> point = split(v3[i], ',');
+
+    int x = abs(std::stoi(point[0]));
+    int y = abs(std::stoi(point[1]));
+    int m_dist = x + y;
+
     if (output == 0 || output > m_dist)
       output = m_dist;
   }
 
   std::cout << output << std::endl;
+
   return 0;
 }
