@@ -1,6 +1,5 @@
 #include "common.h"
 #include <algorithm>
-#include <sstream>
 #include <unordered_set>
 #include <unordered_map>
 
@@ -18,18 +17,6 @@ std::vector<std::string> intersection(std::vector<std::string> &v1, std::vector<
   }
 
   return v3;
-}
-
-std::vector<std::string> split(const std::string& s, char delimiter)
-{
-   std::vector<std::string> tokens;
-   std::string token;
-   std::istringstream ss(s);
-   while (std::getline(ss, token, delimiter))
-   {
-      tokens.push_back(token);
-   }
-   return tokens;
 }
 
 int main()
