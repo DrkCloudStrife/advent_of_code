@@ -2,22 +2,20 @@
 #include <algorithm>
 #include <sstream>
 #include <unordered_set>
+#include <unordered_map>
 
 std::vector<std::string> intersection(std::vector<std::string> &v1, std::vector<std::string> &v2)
 {
   std::vector<std::string> v3;
 
-  std::sort(v1.begin(), v1.end());
-  std::sort(v2.begin(), v2.end());
+  std::unordered_set<std::string> col(v1.begin(), v1.end());
 
-  std::set_intersection(v1.begin(),v1.end(),
-    v2.begin(),v2.end(),
-    back_inserter(v3)
-  );
-
-  std::vector<std::string>::iterator ip;
-  ip = std::unique(v3.begin(), v3.end());
-  v3.resize(std::distance(v3.begin(), ip));
+  for(auto a : v2)
+  {
+    if (col.erase(a) > 0) {
+      v3.push_back(a);
+    }
+  }
 
   return v3;
 }
@@ -37,8 +35,7 @@ std::vector<std::string> split(const std::string& s, char delimiter)
 int main()
 {
   std::ifstream fs;
-  std::string file = "day3.txt";
-  fs.open(file);
+  std::string file = "day3.txt"; fs.open(file);
 
   if (!fs)
   {
@@ -64,13 +61,11 @@ int main()
   int vsSize = vs.size();
   std::vector<std::vector<std::string> > wires;
   wires.reserve(1000);
-  int px = { 0 };
-  int py = { 0 };
 
   for(int i=0; i < vsSize; i++)
   {
-    px = 0;
-    py = 0;
+    int px = { 0 };
+    int py = { 0 };
 
     for(int j=0; j < vs[i].size(); j++)
     {
@@ -82,7 +77,7 @@ int main()
       {
         for(int k=0; k < dist; k++)
         {
-          std::string pos = std::to_string(px) + "," + std::to_string(py++);// {px, py++};
+          std::string pos = std::to_string(px) + "," + std::to_string(py++);
           wires[i].push_back(pos);
         }
       }
@@ -118,7 +113,8 @@ int main()
   //p1
   std::vector<std::string> v3 = intersection(wires[0], wires[1]);
   int output = { 0 };
-  for(int i=0; i < v3.size(); i++)
+  int v3Size = v3.size();
+  for(int i=0; i < v3Size; i++)
   {
     std::vector<std::string> point = split(v3[i], ',');
 
@@ -131,6 +127,34 @@ int main()
   }
 
   std::cout << output << std::endl;
+
+  //p2
+  std::unordered_map<std::string,int> w1;
+  std::unordered_map<std::string,int> w2;
+  int steps = { 0 };
+  for(int i=0; i < wires[0].size(); i++)
+  {
+    w1[wires[0][i]] = steps++;
+  }
+
+  steps = 0; // reset
+  for(int i=0; i < wires[1].size(); i++)
+  {
+    w2[wires[1][i]] = steps++;
+  }
+
+  int p2out = { 0 };
+  for(int i=0; i < v3Size; i++)
+  {
+    int w1l = w1[v3[i]];
+    int w2l = w2[v3[i]];
+    int m_dist = w1l + w2l;
+
+    if (p2out == 0 || p2out > m_dist)
+      p2out = m_dist;
+  }
+
+  std::cout << p2out << std::endl;
 
   return 0;
 }
