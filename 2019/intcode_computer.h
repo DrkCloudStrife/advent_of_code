@@ -14,10 +14,13 @@ class IntcodeComputer
     std::vector<int> vR;
     std::ifstream fs;
     int vSize;
+    int pMode;
   protected:
     static int haltCode;
     static int addCode;
     static int mulCode;
+    static int inCode;
+    static int outCode;
   public:
     IntcodeComputer(std::string file);
 
@@ -30,8 +33,10 @@ class IntcodeComputer
 };
 
 int IntcodeComputer::haltCode = 99;
-int IntcodeComputer::addCode  = 1;
-int IntcodeComputer::mulCode  = 2;
+int IntcodeComputer::addCode = 1;
+int IntcodeComputer::mulCode = 2;
+int IntcodeComputer::inCode = 3;
+int IntcodeComputer::outCode = 4;
 
 IntcodeComputer::IntcodeComputer(std::string file)
 {
@@ -66,6 +71,7 @@ void IntcodeComputer::setInput(int noun, int verb)
 
 void IntcodeComputer::run()
 {
+  pMode = 0; // start as position mode
   for(int i=0; i < vSize; i++)
   {
     int opCode = vR[i];
@@ -78,15 +84,33 @@ void IntcodeComputer::run()
     if (opCode == haltCode)
       break;
 
-    if (opCode == addCode)
+    // Support parameter modes, assumptions made here
+   if (opCode > 100)
     {
-      vR[t] = v1 + v2;
+      std::vector<int> params = splitInt(opCode, true);
+      std::vector<int> m_op = {params.begin(), params.begin() + 2};
+
+      opCode = params
+      /* if (opCode == inCode) */
+      /* { */
+      /*   // TODO */
+      /* } */
+      /*  */
+      /* if (opCode == outCode) */
+      /* { */
+      /*   // TODO */
+      /* } */
     }
 
-    if (opCode == mulCode)
-    {
-      vR[t] = v1 * v2;
-    }
+
+    /* if (opCode == addCode) */
+    /* { */
+    /*   vR[t] = v1 + v2; */
+    /* } */
+    /* else (opCode == mulCode) */
+    /* { */
+    /*   vR[t] = v1 * v2; */
+    /* } */
 
     i += 3; // skip to next op
   }
