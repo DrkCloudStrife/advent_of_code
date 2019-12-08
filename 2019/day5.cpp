@@ -2,11 +2,10 @@
 
 int main()
 {
-  IntcodeComputer computer("day5_test.txt");
-  computer.run();
+  IntcodeComputer computer("day5.txt");
 
-  // p1
-  std::cout << computer.getResult() << std::endl;
+  //p1
+  computer.runTest();
 
   return 0;
 }
