@@ -4,7 +4,7 @@
 
 void validateNumPass(int& p1Size, int&p2Size, int pw)
 {
-  std::vector<int> vd = splitInt(pw);
+  std::list<int> vd = splitInt(pw);
 
   bool isAsc   = false;
   bool isP1Val = false;
