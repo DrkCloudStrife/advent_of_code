@@ -2,9 +2,14 @@
 
 int main()
 {
-  IntcodeComputer computer("day5.txt");
+  IntcodeComputer computer("day5_test.txt");
 
-  //p1
+  // //p1
+  // computer.runTest();
+  //
+  // computer.reset();
+
+  //p2
   computer.runTest();
 
   return 0;

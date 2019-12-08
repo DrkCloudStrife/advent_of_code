@@ -21,12 +21,17 @@ class IntcodeComputer
     static const int mulCode;
     static const int inCode;
     static const int outCode;
+    static const int jmpTCode;
+    static const int jmpFCode;
+    static const int ltCode;
+    static const int eqCode;
   public:
     IntcodeComputer(std::string);
 
     void setInput(int, int);
     void run();
     void runTest();
+    void reset();
 
     int getResult() { return pIntCode[0]; }
     int getResultFromPosition(int);
@@ -39,6 +44,10 @@ const int IntcodeComputer::addCode = 1;
 const int IntcodeComputer::mulCode = 2;
 const int IntcodeComputer::inCode = 3;
 const int IntcodeComputer::outCode = 4;
+const int IntcodeComputer::jmpTCode = 5;
+const int IntcodeComputer::jmpFCode = 6;
+const int IntcodeComputer::ltCode = 7;
+const int IntcodeComputer::eqCode = 8;
 
 IntcodeComputer::IntcodeComputer(std::string file)
 {
@@ -56,10 +65,15 @@ IntcodeComputer::IntcodeComputer(std::string file)
     intCode.push_back(std::stoi(s));
   }
   // Set defaults
+  reset();
+  pSize = pIntCode.size();
+}
+
+void IntcodeComputer::reset()
+{
   mNoun = intCode[1];
   mVerb = intCode[2];
   pIntCode = intCode;
-  pSize = pIntCode.size();
 }
 
 int IntcodeComputer::getResultFromPosition(int pos)
@@ -96,7 +110,7 @@ std::map<std::string,int> IntcodeComputer::prepareOperations(int index)
   else
     ops["operation"] = oc1;
 
-  if (params.size() > 0) 
+  if (params.size() > 0)
     std::reverse(params.begin(),params.end());
 
   for(int i=0; i<3; i++) // 4 operations (opCode + 3 params)
@@ -157,7 +171,7 @@ void IntcodeComputer::runTest()
     int opTarget;
     int val1;
     int val2;
-    int opShift = 3;
+    int opShift = 3; // default params are 4, we set 3 + 1 on loop for next instruction.
     std::map<std::string,int> mOpMode;
 
     mOpMode = prepareOperations(i);
@@ -169,8 +183,10 @@ void IntcodeComputer::runTest()
 
     val1 = (mOpMode["param1"] == 0) ? pIntCode[op1] : op1;
     val2 = (mOpMode["param2"] == 0) ? pIntCode[op2] : op2;
-    // opTarget = (mOpMode["param3"] == 0) ? pIntCode[op3] : op3; // Not needed yet?
     opTarget = op3;
+
+    // std::cout << "idx: " << i << " - " << mOpMode["operation"] << ":" << mOpMode["param1"] << ":" << mOpMode["param2"] << std::endl;
+    // std::cout << "val: " << val1 << ":" << val2 << std::endl;
 
     if (opCode == addCode)
     {
@@ -183,7 +199,8 @@ void IntcodeComputer::runTest()
     else if (opCode == inCode)
     {
       std::cout << "Enter an input" << std::endl;
-      std::cin >> op1;
+      std::cin >> val1;
+      pIntCode[op1] = val1;
       opShift = 1;
     }
     else if (opCode == outCode)
@@ -191,10 +208,42 @@ void IntcodeComputer::runTest()
       std::cout << "O: " << val1 << std::endl;
       opShift = 1;
     }
+    else if (opCode == jmpTCode)
+    {
+      if (mOpMode["param1"] > 0)
+      {
+        i = val2;
+        opShift = -1; // due to auto-increment
+      }
+      else
+        opShift = 1;
+    }
+    else if (opCode == jmpFCode)
+    {
+      if (mOpMode["param1"] == 0)
+      {
+        i = val2;
+        opShift = -1; // due to auto-increment
+      }
+      else
+        opShift = 1;
+    }
+    else if (opCode == ltCode)
+    {
+      std::cout << "LT: " << ((mOpMode["param1"] < mOpMode["param2"]) ? 1 : 0) << std::endl;
+      pIntCode[opTarget] = (mOpMode["param1"] < mOpMode["param2"]) ? 1 : 0;
+    }
+    else if (opCode == eqCode)
+    {
+      std::cout << "EQ: " << ((mOpMode["param1"] ==  mOpMode["param2"]) ? 1 : 0) << std::endl;
+      pIntCode[opTarget] = (mOpMode["param1"] == mOpMode["param2"]) ? 1 : 0;
+    }
     else if (opCode == haltCode)
     {
       break;
     }
+    else
+      opShift = 0; // no new params, shift to next instruction
 
     i += opShift; // skip to next op
   }
