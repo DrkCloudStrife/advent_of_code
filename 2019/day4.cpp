@@ -4,16 +4,7 @@
 
 void validateNumPass(int& p1Size, int&p2Size, int pw)
 {
-  int tmpNum = pw;
-  int digit;
-  std::vector<int> vd;
-
-  while (tmpNum > 0)
-  {
-    digit = tmpNum % 10;
-    tmpNum = tmpNum / 10;
-    vd.push_back(digit);
-  }
+  std::list<int> vd = splitInt(pw);
 
   bool isAsc   = false;
   bool isP1Val = false;

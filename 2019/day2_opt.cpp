@@ -37,6 +37,5 @@ int main()
     computer.run();
   }
 
-  std::cout << n << std::endl;
-  std::cout << v << std::endl;
+  std::cout << 100 * computer.getNoun() + computer.getVerb() << std::endl;
 }
