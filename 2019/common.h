@@ -4,15 +4,6 @@
 #include <vector>
 #include <list>
 
-struct Node 
-{
-  int data;
-  struct Node * next;
-  struct Node * prev;
-};
-
-struct Node* headNode;
-
 std::vector<std::string> split(const std::string& s, char delimiter)
 {
    std::vector<std::string> tokens;
