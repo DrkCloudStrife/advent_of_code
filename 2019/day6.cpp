@@ -77,8 +77,16 @@ int main()
     }
   }
 
+  // p1
   int dirOrbCount = { 0 };
   int indirOrbCount = { 0 };
+
+  // p2
+  std::string YOU = "YOU";
+  std::string SAN = "SAN";
+
+  std::map<std::string, int> sanOrbits;
+  std::map<std::string, int> youOrbits;
 
   orbit_collection::iterator it = orbits.begin();
 
@@ -86,21 +94,40 @@ int main()
   {
     struct Orbit* currentOrbit = it->second;
     if (currentOrbit->parent != NULL)
-    {
       dirOrbCount++;
-      while (currentOrbit->parent != NULL)
-      {
-        currentOrbit = currentOrbit->parent;
-        if (currentOrbit->parent != NULL)
-          indirOrbCount++;
-      }
+
+    bool trackYOU = false;
+    bool trackSAN = false;
+    int idx = { 0 };
+
+    while (currentOrbit->parent != NULL)
+    {
+      if (currentOrbit->name == YOU)
+        trackYOU = true;
+      if (currentOrbit->name == SAN)
+        trackSAN = true;
+
+      currentOrbit = currentOrbit->parent;
+      if (trackSAN)
+        sanOrbits.insert(std::pair<std::string, int>(currentOrbit->name, idx));
+      if (trackYOU)
+        youOrbits.insert(std::pair<std::string, int>(currentOrbit->name, idx));
+      if (currentOrbit->parent != NULL)
+        indirOrbCount++;
+
+      idx++;
     }
 
     it++;
   }
 
   // p1
-  std::cout << "D: " << dirOrbCount << "; I: " << indirOrbCount << "; T: " << dirOrbCount + indirOrbCount << std::endl;
+  std::cout << dirOrbCount + indirOrbCount << std::endl;
+
+  // p2
+  // get closest intersecting orbit
+  // get orbit jumps between YOU and SAN to closest intersecting object
+  std::cout << youOrbits.size() << ":" << sanOrbits.size() << std::endl;
 
   return 0;
 }
