@@ -1,23 +1,6 @@
 #include "common.h"
 #include <algorithm>
-#include <unordered_set>
 #include <unordered_map>
-
-std::vector<std::string> intersection(std::vector<std::string> &v1, std::vector<std::string> &v2)
-{
-  std::vector<std::string> v3;
-
-  std::unordered_set<std::string> col(v1.begin(), v1.end());
-
-  for(auto a : v2)
-  {
-    if (col.erase(a) > 0) {
-      v3.push_back(a);
-    }
-  }
-
-  return v3;
-}
 
 int main()
 {

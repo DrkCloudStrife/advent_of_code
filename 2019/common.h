@@ -1,17 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <unordered_set>
 #include <vector>
 #include <list>
-
-struct Node 
-{
-  int data;
-  struct Node * next;
-  struct Node * prev;
-};
-
-struct Node* headNode;
 
 std::vector<std::string> split(const std::string& s, char delimiter)
 {
@@ -49,4 +41,20 @@ std::list<int> splitInt(const int& num);
 std::list<int> splitInt(const int& num)
 {
   return splitInt(num, false);
+}
+
+std::vector<std::string> intersection(std::vector<std::string> &v1, std::vector<std::string> &v2)
+{
+  std::vector<std::string> v3;
+
+  std::unordered_set<std::string> col(v1.begin(), v1.end());
+
+  for(auto a : v2)
+  {
+    if (col.erase(a) > 0) {
+      v3.push_back(a);
+    }
+  }
+
+  return v3;
 }
