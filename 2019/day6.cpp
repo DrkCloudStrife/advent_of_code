@@ -85,8 +85,10 @@ int main()
   std::string YOU = "YOU";
   std::string SAN = "SAN";
 
-  std::map<std::string, int> sanOrbits;
-  std::map<std::string, int> youOrbits;
+  std::map<std::string, int> sanOrbitsDist;
+  std::map<std::string, int> youOrbitsDist;
+  std::vector<std::string> vYOU;
+  std::vector<std::string> vSAN;
 
   orbit_collection::iterator it = orbits.begin();
 
@@ -108,10 +110,18 @@ int main()
         trackSAN = true;
 
       currentOrbit = currentOrbit->parent;
+
       if (trackSAN)
-        sanOrbits.insert(std::pair<std::string, int>(currentOrbit->name, idx));
+      {
+        sanOrbitsDist.insert(std::pair<std::string, int>(currentOrbit->name, idx));
+        vSAN.push_back(currentOrbit->name);
+      }
       if (trackYOU)
-        youOrbits.insert(std::pair<std::string, int>(currentOrbit->name, idx));
+      {
+        youOrbitsDist.insert(std::pair<std::string, int>(currentOrbit->name, idx));
+        vYOU.push_back(currentOrbit->name);
+      }
+
       if (currentOrbit->parent != NULL)
         indirOrbCount++;
 
@@ -125,9 +135,27 @@ int main()
   std::cout << dirOrbCount + indirOrbCount << std::endl;
 
   // p2
-  // get closest intersecting orbit
-  // get orbit jumps between YOU and SAN to closest intersecting object
-  std::cout << youOrbits.size() << ":" << sanOrbits.size() << std::endl;
+  int lowYOU = { 0 };
+  int lowSAN = { 0 };
+  std::vector<std::string> similar = intersection(vYOU, vSAN);
+  for(int i = 0; i < similar.size(); i++)
+  {
+    std::string sOrbit = similar[i];
+    int tmpSAN = sanOrbitsDist.find(sOrbit)->second;
+    int tmpYOU = youOrbitsDist.find(sOrbit)->second;
+
+    if (lowYOU == 0 && tmpYOU > 0)
+      lowYOU = tmpYOU;
+    if (lowYOU != 0 && lowYOU > tmpYOU)
+      lowYOU = tmpYOU;
+
+    if (lowSAN == 0 && tmpSAN > 0)
+      lowSAN = tmpSAN;
+    if (lowSAN != 0 && lowSAN > tmpSAN)
+      lowSAN = tmpSAN;
+  }
+
+  std::cout << lowSAN + lowYOU << std::endl;
 
   return 0;
 }
