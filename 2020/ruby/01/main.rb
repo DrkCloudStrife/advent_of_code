@@ -8,7 +8,7 @@ class ExpenseReporter
 
   def initialize
     @dir = Pathname.new(__FILE__).realpath.dirname
-    @file = @dir.join('day1_input.txt')
+    @file = @dir.join('input.txt')
     @expenses = @file.read.split("\n")
   end
 
