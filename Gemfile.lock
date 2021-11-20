@@ -1,0 +1,62 @@
+GIT
+  remote: https://github.com/rspec/rspec-core.git
+  revision: bbe35666734e36706e18b8fa320ed037f59ccd4a
+  branch: main
+  specs:
+    rspec-core (3.11.0.pre)
+      rspec-support (= 3.11.0.pre)
+
+GIT
+  remote: https://github.com/rspec/rspec-expectations.git
+  revision: 30cf0f668816d1ae7060294d5db00f9fb43dec44
+  branch: main
+  specs:
+    rspec-expectations (3.11.0.pre)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (= 3.11.0.pre)
+
+GIT
+  remote: https://github.com/rspec/rspec-mocks.git
+  revision: fba5b1b25972cc3cc1754cecbf763b879deda71a
+  branch: main
+  specs:
+    rspec-mocks (3.11.0.pre)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (= 3.11.0.pre)
+
+GIT
+  remote: https://github.com/rspec/rspec-support.git
+  revision: 12069e1c1ad1852b7970e7fcd419d56a8a9e6240
+  branch: main
+  specs:
+    rspec-support (3.11.0.pre)
+
+GIT
+  remote: https://github.com/rspec/rspec.git
+  revision: 58ce1daf083add0aef88f874b5a049a3146eb909
+  branch: main
+  specs:
+    rspec (3.11.0.pre)
+      rspec-core (= 3.11.0.pre)
+      rspec-expectations (= 3.11.0.pre)
+      rspec-mocks (= 3.11.0.pre)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    byebug (11.1.3)
+    diff-lcs (1.4.4)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  byebug
+  rspec!
+  rspec-core!
+  rspec-expectations!
+  rspec-mocks!
+  rspec-support!
+
+BUNDLED WITH
+   2.1.2
