@@ -70,15 +70,6 @@ end
 
 @dir = Pathname.new(__FILE__).realpath.dirname
 
-## Test
-test_file = @dir.join('test.txt')
-reporter = ExpenseReporter.new(test_file)
-reporter.two_expenses
-puts "Matches Desired Expense: #{(reporter.expense1 + reporter.expense2) == ExpenseReporter::DESIRED_EXPENSE}"
-puts "Matches sample Expense: #{(reporter.expense1 * reporter.expense2) == 514579}"
-
-puts ""
-
 ## Run
 @file = @dir.join('input.txt')
 reporter = ExpenseReporter.new(@file)
