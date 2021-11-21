@@ -71,6 +71,6 @@ end
 @dir = Pathname.new(__FILE__).realpath.dirname
 
 ## Run
-@file = @dir.join('input.txt')
+@file = @dir.join('../../shared/input_day01.txt')
 reporter = ExpenseReporter.new(@file)
 puts reporter.solve
