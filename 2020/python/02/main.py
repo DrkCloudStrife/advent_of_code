@@ -1,4 +1,7 @@
+import re
+
 class PasswordValidator(object):
+    POLICY_PARSER = '^(\d-\d)\s(\w):\s(.*)'
 
     def __init__(self, data):
         self.passwords = []
@@ -9,18 +12,21 @@ class PasswordValidator(object):
         data.close()
 
     def validate(self):
-        for row in self.passwords:
-          policy = self.__get_policy(row)
-          password = self.__get_password(row)
-          # if policy matches password, add to `self.valid_passwords
+        for policy in self.passwords:
+            p_range, p_character, p_password, _ = self.__parse_policy(policy)
+            print(p_range)
+            print(p_character)
+            print(p_password)
+            print('=======')
 
-    # Might not need this.
-    # def valid_passwords(self):
-        # return self.valid_passwords
+    def __parse_policy(self, policy):
+        results = re.split(self.POLICY_PARSER, policy)
+        return self.__sanitize_policy_results(results)
 
-    def __get_policy(self, row):
-        # IMPLEMENT 
-        print('TBD')
+    def __sanitize_policy_results(self, results):
+        parsed_results = []
+        for string in results:
+            if (string != ""):
+                parsed_results.append(string)
 
-    def __get_password(self, row):
-        print('TBD')
+        return parsed_results
