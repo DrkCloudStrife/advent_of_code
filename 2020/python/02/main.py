@@ -1,7 +1,7 @@
 import re
 
 class PasswordValidator(object):
-    POLICY_PARSER = '^(\d-\d)\s(\w):\s(.*)'
+    POLICY_PARSER = '^(\d+-\d+)\s(\w):\s(.*)'
 
     def __init__(self, data):
         self.passwords = []
@@ -13,20 +13,13 @@ class PasswordValidator(object):
 
     def validate(self):
         for policy in self.passwords:
-            p_range, p_character, p_password, _ = self.__parse_policy(policy)
-            print(p_range)
-            print(p_character)
-            print(p_password)
-            print('=======')
+            p_range, p_character, p_password = self.__parse_policy(policy)
+            pattern = re.compile(r'{}'.format(p_character))
+            range_arr = p_range.split('-')
+            range_1 = range(int(range_arr[0]), int(range_arr[1]) + 1)
+            if len(pattern.findall(p_password)) in range_1:
+                self.valid_passwords.append(p_password)
 
     def __parse_policy(self, policy):
-        results = re.split(self.POLICY_PARSER, policy)
-        return self.__sanitize_policy_results(results)
-
-    def __sanitize_policy_results(self, results):
-        parsed_results = []
-        for string in results:
-            if (string != ""):
-                parsed_results.append(string)
-
-        return parsed_results
+        results = re.findall(self.POLICY_PARSER, policy)
+        return results[0]
