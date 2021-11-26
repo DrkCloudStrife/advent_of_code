@@ -7,5 +7,8 @@ path = open("{dir}/{file}".format(dir=path, file="../../../spec/fixtures/2020_03
 counter = TreeCounter(path)
 
 counter.traverse_pt1()
-print("Trees counted match?")
+print('Trees counted match?')
 print(len(counter.trees_encountered) == 7)
+
+print('Trees proability match?')
+print(counter.traverse_pt2() == 336)
