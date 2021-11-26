@@ -10,5 +10,5 @@ counter.traverse_pt1()
 print('Trees counted match?')
 print(len(counter.trees_encountered) == 7)
 
-print('Trees proability match?')
+print('Trees probability match?')
 print(counter.traverse_pt2() == 336)
