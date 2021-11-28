@@ -9,6 +9,15 @@ class PasswordValidator(object):
     HEIGHT = 'hgt:(\w+)(?=\s|$)'
     ISSUE_YEAR = 'iyr:(\d+)(?=\s|$)'
     PASSPORT_ID = 'pid:(\d+)(?=\s|$)'
+    REQUIRED_FIELDS = {
+        'byr': 'byr:(\d{4})(?=\s|$)',
+        'eyr': 'eyr:(\d+)(?=\s|$)',
+        'ecl': 'ecl:(\w+)(?=\s|$)',
+        'hcl': 'hcl:(#\w+)(?=\s|$)',
+        'hgt': 'hgt:(\w+)(?=\s|$)',
+        'iyr': 'iyr:(\d+)(?=\s|$)',
+        'pid': 'pid:(\d+)(?=\s|$)'
+    }
 
     def __init__(self, data):
         self.passports = []
@@ -39,27 +48,17 @@ class PasswordValidator(object):
 
             if is_valid:
                 self.valid_passports.append(passport)
-            # birth = self.__pattern('BIRTH_YEAR').findall(passport)
-            # country = self.__pattern('COUNTRY_ID').findall(passport)
-            # expiration = self.__pattern('EXPIRATION_YEAR').findall(passport)
-            # eyes = self.__pattern('EYE_COLOR').findall(passport)
-            # hair = self.__pattern('HAIR_COLOR').findall(passport)
-            # height = self.__pattern('HEIGHT').findall(passport)
-            # issued = self.__pattern('ISSUE_YEAR').findall(passport)
-            # pid = self.__pattern('PASSPORT_ID').findall(passport)
 
-            # rg_valid = (birth and expiration and eyes and hair and height and issued and pid)
-
-            # if is_valid and not rg_valid:
-                # print('passport discrepancy: [{}] {}'.format(idx, passport))
-                # print('birth: {}'.format(birth))
-                # print('exp: {}'.format(expiration))
-                # print('eyes: {}'.format(eyes))
-                # print('hair: {}'.format(hair))
-                # print('height: {}'.format(height))
-                # print('issued: {}'.format(issued))
-                # print('pid: {}'.format(pid))
-                # print('----')
+    def validate_pt2(self):
+        self.__reset_valid_passports()
+        for passport in self.passports:
+            validity = []
+            for key in list(self.REQUIRED_FIELDS):
+                is_valid = self.__validate(key, passport)
+                print(is_valid)
+                validity.append(is_valid)
+            # if all validity fields are true
+            # Add to `valid_passports`
 
     def __aggregate_passports(self, data):
         current_passport = ""
@@ -73,9 +72,32 @@ class PasswordValidator(object):
 
         self.passports.append(current_passport.strip())
 
-    def __pattern(self, pattern_type):
-        reg = getattr(self, pattern_type)
-        return re.compile(r'{}'.format(reg))
+    def __validate_byr(self,value):
+        print('TBD BYR')
+
+    def __validate_eyr(self,value):
+        print('TBD eyr')
+
+    def __validate_ecl(self,value):
+        print('TBD ecl')
+
+    def __validate_hcl(self,value):
+        print('TBD hcl')
+
+    def __validate_hgt(self,value):
+        print('TBD hgt')
+
+    def __validate_iyr(self,value):
+        print('TBD iyt')
+
+    def __validate_pid(self,value):
+        print('TBD pid')
+
+    def __validate(self, field, pattern):
+        reg = self.REQUIRED_FIELDS[field]
+        value = re.compile(r'{}'.format(reg))
+        validator = getattr(self,'_PasswordValidator__validate_{}'.format(field))
+        return validator(value)
 
     def __reset_valid_passports(self):
         self.valid_passports = []
