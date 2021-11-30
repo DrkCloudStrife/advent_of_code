@@ -1,15 +1,14 @@
-import math
 import re
 
 class PasswordValidator(object):
     REQUIRED_FIELDS = {
-        'byr': 'byr:(\d+)(?=\s|$)',
-        'eyr': 'eyr:(\d+)(?=\s|$)',
+        'byr': 'byr:(\d{4})(?=\s|$)',
+        'eyr': 'eyr:(\d{4})(?=\s|$)',
         'ecl': 'ecl:(\w+)(?=\s|$)',
         'hcl': 'hcl:(#(?:[0-9a-fA-F]{3}){1,2})(?=\s|$)',
         'hgt': 'hgt:(\w+)(?=\s|$)',
-        'iyr': 'iyr:(\d+)(?=\s|$)',
-        'pid': 'pid:(\d+)(?=\s|$)'
+        'iyr': 'iyr:(\d{4})(?=\s|$)',
+        'pid': 'pid:(\d{9})(?=\s|$)'
     }
 
     def __init__(self, data):
@@ -51,8 +50,6 @@ class PasswordValidator(object):
                 validity.append(is_valid)
             if all(validity):
                 self.valid_passports.append(passport)
-            # if all validity fields are true
-            # Add to `valid_passports`
 
     def __aggregate_passports(self, data):
         current_passport = ""
@@ -68,13 +65,13 @@ class PasswordValidator(object):
 
     def __validate_byr(self,value):
         value = int(value)
-        if int(math.log10(value))+1 == 4 and value >= 1920 and value <= 2002:
+        if value >= 1920 and value <= 2002:
             return True
         return False
 
     def __validate_eyr(self,value):
         value = int(value)
-        if int(math.log10(value))+1 == 4 and value >= 2020 and value <= 2030:
+        if value >= 2020 and value <= 2030:
             return True
         return False
 
@@ -99,7 +96,7 @@ class PasswordValidator(object):
 
     def __validate_iyr(self,value):
         value = int(value)
-        if int(math.log10(value))+1 == 4 and value >= 2010 and value <= 2020:
+        if value >= 2010 and value <= 2020:
             return True
         return False
 
