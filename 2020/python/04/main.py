@@ -19,26 +19,10 @@ class PasswordValidator(object):
     def validate_pt1(self):
         self.__reset_valid_passports()
         for idx, passport in enumerate(self.passports):
-            has_birth_year = "byr" in passport
-            has_issue_year = "iyr" in passport
-            has_expiration_year = "eyr" in passport
-            has_height = "hgt" in passport
-            has_hair_color = "hcl" in passport
-            has_eye_color = "ecl" in passport
-            has_passport_id = "pid" in passport
-            has_country_id = "cid" in passport
-
-            is_valid = (
-                has_birth_year and
-                has_issue_year and
-                has_expiration_year and
-                has_height and
-                has_hair_color and
-                has_eye_color and
-                has_passport_id
-            )
-
-            if is_valid:
+            validity = []
+            for key in list(self.REQUIRED_FIELDS):
+                validity.append(key in passport)
+            if all(validity):
                 self.valid_passports.append(passport)
 
     def validate_pt2(self):
