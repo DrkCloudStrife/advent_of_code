@@ -1,19 +1,12 @@
+import math
 import re
 
 class PasswordValidator(object):
-    BIRTH_YEAR = 'byr:(\d+)(?=\s|$)'
-    COUNTRY_ID = 'cid:(\d+)(?=\s|$)'
-    EXPIRATION_YEAR = 'eyr:(\d+)(?=\s|$)'
-    EYE_COLOR = 'ecl:(\w+)(?=\s|$)'
-    HAIR_COLOR = 'hcl:(#\w+)(?=\s|$)'
-    HEIGHT = 'hgt:(\w+)(?=\s|$)'
-    ISSUE_YEAR = 'iyr:(\d+)(?=\s|$)'
-    PASSPORT_ID = 'pid:(\d+)(?=\s|$)'
     REQUIRED_FIELDS = {
-        'byr': 'byr:(\d{4})(?=\s|$)',
+        'byr': 'byr:(\d+)(?=\s|$)',
         'eyr': 'eyr:(\d+)(?=\s|$)',
         'ecl': 'ecl:(\w+)(?=\s|$)',
-        'hcl': 'hcl:(#\w+)(?=\s|$)',
+        'hcl': 'hcl:(#(?:[0-9a-fA-F]{3}){1,2})(?=\s|$)',
         'hgt': 'hgt:(\w+)(?=\s|$)',
         'iyr': 'iyr:(\d+)(?=\s|$)',
         'pid': 'pid:(\d+)(?=\s|$)'
@@ -55,8 +48,9 @@ class PasswordValidator(object):
             validity = []
             for key in list(self.REQUIRED_FIELDS):
                 is_valid = self.__validate(key, passport)
-                print(is_valid)
                 validity.append(is_valid)
+            if all(validity):
+                self.valid_passports.append(passport)
             # if all validity fields are true
             # Add to `valid_passports`
 
@@ -73,31 +67,53 @@ class PasswordValidator(object):
         self.passports.append(current_passport.strip())
 
     def __validate_byr(self,value):
-        print('TBD BYR')
+        value = int(value)
+        if int(math.log10(value))+1 == 4 and value >= 1920 and value <= 2002:
+            return True
+        return False
 
     def __validate_eyr(self,value):
-        print('TBD eyr')
+        value = int(value)
+        if int(math.log10(value))+1 == 4 and value >= 2020 and value <= 2030:
+            return True
+        return False
 
     def __validate_ecl(self,value):
-        print('TBD ecl')
+        if value in ['amb','blu','brn','gry','grn','hzl','oth']:
+            return True
+        return False
 
     def __validate_hcl(self,value):
-        print('TBD hcl')
+        return True
 
     def __validate_hgt(self,value):
-        print('TBD hgt')
+        regx = r'^([0-9]+)(cm|in)'
+        if re.search(regx, value):
+            size, metric = re.findall(regx, value)[0]
+            size = int(size)
+            if metric == 'cm':
+                return size >= 150 and size <= 193
+            elif metric == 'in':
+                return size >= 59 and size <= 76
+        return False
 
     def __validate_iyr(self,value):
-        print('TBD iyt')
+        value = int(value)
+        if int(math.log10(value))+1 == 4 and value >= 2010 and value <= 2020:
+            return True
+        return False
 
     def __validate_pid(self,value):
-        print('TBD pid')
+        return len(value) == 9
 
-    def __validate(self, field, pattern):
-        reg = self.REQUIRED_FIELDS[field]
-        value = re.compile(r'{}'.format(reg))
+    def __validate(self, field, passport):
+        regx_str = self.REQUIRED_FIELDS[field]
+        regx = re.compile(r'{}'.format(regx_str))
+        values = regx.findall(passport)
+        if len(values) is 0:
+            return False
         validator = getattr(self,'_PasswordValidator__validate_{}'.format(field))
-        return validator(value)
+        return validator(values[0])
 
     def __reset_valid_passports(self):
         self.valid_passports = []
