@@ -1,4 +1,4 @@
-#include "common.h"
+#include "../shared/cpp/common.h"
 #include <map>
 
 const int ALPHABET_SIZE = 26;

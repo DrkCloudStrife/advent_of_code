@@ -1,4 +1,4 @@
-#include "common.h"
+#include "../shared/cpp/common.h"
 #include <map>
 
 struct Orbit
