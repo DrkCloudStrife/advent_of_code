@@ -58,3 +58,17 @@ std::vector<std::string> intersection(std::vector<std::string> &v1, std::vector<
 
   return v3;
 }
+
+
+std::ifstream readFile(const char* fileName)
+{
+  std::ifstream fs;
+  fs.open(fileName);
+  if (!fs)
+  {
+    std::cerr << "File: " << fileName << " could not be opened";
+    exit(1);
+  }
+
+  return fs;
+}
