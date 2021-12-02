@@ -11,4 +11,4 @@ print(validator.counter == 150)
 
 print("Depth validator matches?")
 validator.pt2()
-print(validator.counter == 5)
+print(validator.counter == 900)
