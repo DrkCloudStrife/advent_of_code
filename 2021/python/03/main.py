@@ -2,14 +2,13 @@ class Solution(object):
 
     def __init__(self, data):
         self.data = []
-        self.bit_frequencies = []
         [self.data.append(row.strip()) for row in data]
-        self.__prepare_data()
         self.__reset_counters()
 
     def pt1(self):
         gamma = epsilon = ""
-        for frequency in self.bit_frequencies:
+        frequencies = self.__get_frequencies(self.data)
+        for frequency in frequencies:
             gamma += self.__get_max(frequency)
             epsilon += self.__get_min(frequency)
         gamma_rate = int(gamma, 2)
@@ -36,16 +35,21 @@ class Solution(object):
                     if row[idx] != comparator and len(list(filter(None, oxygen))) > 1:
                         oxygen[col_idx] = None
 
+                oxygen = list(filter(None, oxygen))
+
+            frequencies = self.__get_frequencies(co2)
+            frequency = frequencies[idx]
+            comparator_max = self.__get_max(frequency)
+            comparator_min = self.__get_min(frequency)
             if len(co2) > 1:
                 for col_idx, row in enumerate(co2):
                     comparator = comparator_min
-                    if comparator_max == comparator_min:
+                    if comparator_min == comparator_max:
                         comparator = '0'
                     if row[idx] != comparator and len(filter(None, co2)) > 1:
                         co2[col_idx] = None
 
-            oxygen = list(filter(None, oxygen))
-            co2 = list(filter(None, co2))
+                co2 = list(filter(None, co2))
 
         oxygen_rating = int(oxygen[0], 2)
         co2_rating = int(co2[0], 2)
@@ -53,9 +57,6 @@ class Solution(object):
 
     def __reset_counters(self):
         self.counter = 0
-
-    def __prepare_data(self):
-        self.bit_frequencies = self.__get_frequencies(self.data)
 
     def __get_frequencies(self, data):
         row_len = len(data[0])
