@@ -15,15 +15,26 @@ class Solution(object):
                 board_data.append(row.split())
 
             if len(board_data) == 5:
-                self.players.append(BingoBoard(board_data))
+                self.players.append(BingoBoard(board_data, "Player {}".format(i)))
                 board_data = []
 
         print('player boards', self.players)
 
     def pt1(self):
+        bingo_winner = None
+        bingo_drawing = None
+
         for drawing in self.drawings:
             for player in self.players:
                 player.play(drawing)
+
+                if player.has_bingo():
+                    bingo_winner = player
+                    bingo_drawing = drawing
+                    break
+
+            if bingo_winner != None:
+                break
 
     def pt2(self):
         self.__reset_counters()
@@ -35,7 +46,8 @@ class Solution(object):
 # Bingo board
 class BingoBoard(object):
 
-    def __init__(self, data):
+    def __init__(self, data, player_name):
+        self.name = player_name
         self.play_board = data
         self.position = {}
         self.__construct_board_positions()
@@ -45,11 +57,21 @@ class BingoBoard(object):
         }
 
     def play(self, val):
-        print('play board', val)
+        try:
+            x, y = self.position[val]
+            self.columns['row'][x] += 1
+            self.columns['col'][y] += 1
+            self.play_board[x][y] = None
+        except:
+            pass
+
+    def has_bingo(self):
+        print(self.name, 'bingo?', self.columns)
+        return True
 
     def __construct_board_positions(self):
-        for i, row in enumerate(self.play_board):
-            idx = 0
+        for row_idx, row in enumerate(self.play_board):
+            col_idx = 0
             for val in row:
-                idx += 1
-                self.position[val] = (idx, i)
+                self.position[val] = (col_idx, row_idx)
+                col_idx += 1
