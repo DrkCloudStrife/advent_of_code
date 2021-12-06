@@ -7,7 +7,7 @@ validator =  Solution(file_data)
 
 print("Depth validator matches?")
 validator.pt1()
-print(validator.counter == 7)
+print(validator.counter == 4512)
 
 print("Depth validator matches?")
 validator.pt2()
