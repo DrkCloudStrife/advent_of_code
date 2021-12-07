@@ -1,5 +1,4 @@
 class Solution(object):
-
     def __init__(self, data):
         self.drawings = None
         self.players = []
@@ -18,8 +17,6 @@ class Solution(object):
                 self.players.append(BingoBoard(board_data, "Player {}".format(i)))
                 board_data = []
 
-        print('player boards', self.players)
-
     def pt1(self):
         bingo_winner = None
         bingo_drawing = None
@@ -35,6 +32,8 @@ class Solution(object):
 
             if bingo_winner != None:
                 break
+        unmarked_sum = self.__sum_list(bingo_winner.remaining_numbers())
+        self.counter = unmarked_sum * int(bingo_drawing)
 
     def pt2(self):
         self.__reset_counters()
@@ -43,8 +42,12 @@ class Solution(object):
     def __reset_counters(self):
         self.counter = 0
 
+    def __sum_list(self, list_1):
+        return reduce(lambda item1, item2: item1 + item2, list_1)
+
 # Bingo board
 class BingoBoard(object):
+    BINGO_METRIC = 5
 
     def __init__(self, data, player_name):
         self.name = player_name
@@ -66,12 +69,30 @@ class BingoBoard(object):
             pass
 
     def has_bingo(self):
-        print(self.name, 'bingo?', self.columns)
-        return True
+        return (self.BINGO_METRIC in self.columns['row'] or self.BINGO_METRIC in self.columns['col'])
+
+    def remaining_numbers(self):
+        return self.__flat_board()
+
+    def __flat_board(self):
+        flat_list = []
+
+        for element in self.play_board:
+            if type(element) is list:
+                for item in element:
+                    if item is None: continue
+                    if type(item) is str: item = int(item)
+                    flat_list.append(item)
+            else:
+                if item is None: continue
+                if type(item) is str: item = int(item)
+                flat_list.append(element)
+
+        return flat_list
 
     def __construct_board_positions(self):
         for row_idx, row in enumerate(self.play_board):
             col_idx = 0
             for val in row:
-                self.position[val] = (col_idx, row_idx)
+                self.position[val] = (row_idx, col_idx)
                 col_idx += 1
