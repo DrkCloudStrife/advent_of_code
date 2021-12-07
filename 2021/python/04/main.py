@@ -1,21 +1,8 @@
 class Solution(object):
     def __init__(self, data):
+        self.data = data.readlines()
         self.drawings = None
-        self.players = []
         self.__reset_counters()
-
-        board = 0
-        board_data = []
-        for i, row in enumerate(data):
-            if i == 0:
-                self.drawings = row.strip().split(',')
-            else:
-                if row == '\n': continue
-                board_data.append(row.split())
-
-            if len(board_data) == 5:
-                self.players.append(BingoBoard(board_data, "Player {}".format(i)))
-                board_data = []
 
     def pt1(self):
         bingo_winner = None
@@ -36,11 +23,41 @@ class Solution(object):
         self.counter = unmarked_sum * int(bingo_drawing)
 
     def pt2(self):
+        bingo_winner = None
+        bingo_drawing = None
         self.__reset_counters()
-        print("TBD")
+
+        for idx, drawing in enumerate(self.drawings):
+            for player in self.players:
+                if player.has_won is True:
+                    continue
+
+                player.play(drawing)
+                if player.has_bingo():
+                    bingo_winner, bingo_drawing = [player, drawing]
+
+        unmarked_sum = self.__sum_list(bingo_winner.remaining_numbers())
+        self.counter = unmarked_sum * int(bingo_drawing)
 
     def __reset_counters(self):
+        self.players = []
         self.counter = 0
+
+        board = 0
+        board_data = []
+        if len(self.players) == 0:
+            for i, row in enumerate(self.data):
+                if i == 0:
+                    self.drawings = row.strip().split(',')
+                else:
+                    if row == '\n': continue
+                    board_data.append(row.split())
+
+                if len(board_data) == 5:
+                    self.players.append(BingoBoard(board_data, "Player {}".format(i)))
+                    board_data = []
+        else:
+            [player.reset_board() for player in self.players]
 
     def __sum_list(self, list_1):
         return reduce(lambda item1, item2: item1 + item2, list_1)
@@ -50,14 +67,19 @@ class BingoBoard(object):
     BINGO_METRIC = 5
 
     def __init__(self, data, player_name):
+        self.has_won = False
         self.name = player_name
-        self.play_board = data
+        self.__data = data
+        self.play_board = data[:]
         self.position = {}
         self.__construct_board_positions()
         self.columns = {
             "row": [0 for r in range(len(data[0]))],
             "col": [0 for r in range(len(data))],
         }
+
+    def reset_board(self):
+        self.play_board = self.__data[:]
 
     def play(self, val):
         try:
@@ -69,7 +91,10 @@ class BingoBoard(object):
             pass
 
     def has_bingo(self):
-        return (self.BINGO_METRIC in self.columns['row'] or self.BINGO_METRIC in self.columns['col'])
+        if self.BINGO_METRIC in self.columns['row'] or self.BINGO_METRIC in self.columns['col']:
+            self.has_won = True
+
+        return self.has_won
 
     def remaining_numbers(self):
         return self.__flat_board()
