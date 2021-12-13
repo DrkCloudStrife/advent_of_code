@@ -11,4 +11,4 @@ print(validator.counter == 5)
 
 print("Validator test matches?")
 validator.pt2()
-print(validator.counter == 0)
+print(validator.counter == 12)

@@ -1,3 +1,5 @@
+# import numpy as np
+
 class Solution(object):
 
     def __init__(self, data):
@@ -14,22 +16,39 @@ class Solution(object):
                 x = cover_x[0]
                 for ny in cover_y:
                     key = (x,ny)
-                    if key not in self.covers:
-                        self.covers[key] = 0
-                    self.covers[key] += 1
+                    self.__push_cover(key)
             elif len(cover_y) == 1:
                 y = cover_y[0]
                 for nx in cover_x:
                     key = (nx,y)
-                    if key not in self.covers:
-                        self.covers[key] = 0
-                    self.covers[key] += 1
+                    self.__push_cover(key)
 
         self.counter = self.__get_overlap_count()
 
     def pt2(self):
         self.__reset_counters()
-        print("TBD")
+        for line in self.lines:
+            cover_x, cover_y = line
+            if len(cover_x) == 1:
+                x = cover_x[0]
+                for ny in cover_y:
+                    key = (x,ny)
+                    self.__push_cover(key)
+            elif len(cover_y) == 1:
+                y = cover_y[0]
+                for nx in cover_x:
+                    key = (nx,y)
+                    self.__push_cover(key)
+            else:
+                cover_d = [[0,0]] # np.concatenate(cover_x, cover_y)
+
+                for c in cover_d:
+                    cx, cy = c
+                    print(cx, cy)
+
+
+        self.__print_covers()
+        self.counter = self.__get_overlap_count()
 
     def __format_lines(self):
         max_x = 0
@@ -82,3 +101,8 @@ class Solution(object):
             visual_covers += "{}\n".format(visual_row)
 
         print(visual_covers)
+
+    def __push_cover(self, key):
+        if key not in self.covers:
+            self.covers[key] = 0
+        self.covers[key] += 1
