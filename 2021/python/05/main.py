@@ -7,12 +7,28 @@ class Solution(object):
         self.__reset_counters()
 
     def pt1(self):
-        # Need to find lines that have horizontal or veritcal lines only
+        covers = {}
+        counter = 0
         for line in self.lines:
             cover_x, cover_y = line
-            if len(cover_x) == 1 or len(cover_y) == 1:
-                print('yay?', line)
-        print("TBD")
+            if len(cover_x) == 1:
+                counter += 1
+                x = cover_x[0]
+                for ny in cover_y:
+                    key = (x,ny)
+                    if key not in covers:
+                        covers[key] = 0
+                    covers[key] += 1
+            elif len(cover_y) == 1:
+                counter += 1
+                y = cover_y[0]
+                for nx in cover_x:
+                    key = (nx,y)
+                    if key not in covers:
+                        covers[key] = 0
+                    covers[key] += 1
+
+        self.counter = self.__get_overlap_count(covers)
 
     def pt2(self):
         self.__reset_counters()
@@ -32,8 +48,17 @@ class Solution(object):
             else:
                 cover_y = range(int(y1), int(y2)+1)
             self.lines.append([cover_x, cover_y])
-        print(self.lines)
 
     def __reset_counters(self):
         self.counter = 0
         self.overlaps = []
+
+    def __get_overlap_count(self, covers):
+        counter = 0
+
+        for (coords, count) in covers.items():
+            if count > 1:
+                counter += 1
+
+        return counter
+
