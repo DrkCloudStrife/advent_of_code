@@ -59,13 +59,13 @@ class Solution(object):
         self.covers = {}
 
     def __get_overlap_count(self):
-        count = 0
+        local_counter = 0
 
         for (coords, count) in self.covers.items():
             if count > 1:
-                count += 1
+                local_counter += 1
 
-        return count
+        return local_counter
 
     def __print_covers(self):
         visual_covers = ""
