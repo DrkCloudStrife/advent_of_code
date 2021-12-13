@@ -4,7 +4,7 @@ from main import Solution
 
 path = os.path.dirname(os.path.realpath(__file__))
 file_data = open("{dir}/{file}".format(dir=path, file="../../shared/input_day05.txt"))
-validator = Solution(file_data.readlines())
+validator = Solution(file_data.read().splitlines()) #remove linebreak
 
 print("Part 1 Solution:")
 validator.pt1()

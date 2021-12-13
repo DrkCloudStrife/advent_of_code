@@ -8,11 +8,9 @@ class Solution(object):
         self.__reset_counters()
 
     def pt1(self):
-        counter = 0
         for line in self.lines:
             cover_x, cover_y = line
             if len(cover_x) == 1:
-                counter += 1
                 x = cover_x[0]
                 for ny in cover_y:
                     key = (x,ny)
@@ -20,7 +18,6 @@ class Solution(object):
                         self.covers[key] = 0
                     self.covers[key] += 1
             elif len(cover_y) == 1:
-                counter += 1
                 y = cover_y[0]
                 for nx in cover_x:
                     key = (nx,y)
@@ -28,7 +25,6 @@ class Solution(object):
                         self.covers[key] = 0
                     self.covers[key] += 1
 
-        self.__print_covers()
         self.counter = self.__get_overlap_count()
 
     def pt2(self):
@@ -40,8 +36,8 @@ class Solution(object):
         max_y = 0
         for line in self.__data:
             input_1, input_2 = line.split(' -> ')
-            x1, y1 = input_1.split(',')
-            x2, y2 = input_2.split(',')
+            x1, y1 = [int(n) for n in input_1.split(',')]
+            x2, y2 = [int(n) for n in input_2.split(',')]
             if x1 > x2:
                 cover_x = range(int(x2), int(x1)+1)
                 if x1 > max_x: max_x = x1
@@ -63,13 +59,13 @@ class Solution(object):
         self.covers = {}
 
     def __get_overlap_count(self):
-        counter = 0
+        count = 0
 
         for (coords, count) in self.covers.items():
             if count > 1:
-                counter += 1
+                count += 1
 
-        return counter
+        return count
 
     def __print_covers(self):
         visual_covers = ""
