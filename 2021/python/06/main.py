@@ -22,9 +22,28 @@ class Solution(object):
 
     def pt2(self):
         self.__reset_counters()
-        print('TBD')
+        fishes = [0,0,0,0,0,0,0,0,0] # not relying on former solution
 
-        self.counter = len(self.fish)
+        for fish in self.data:
+            fishes[fish] = fishes[fish]+1
+
+        for day in range(256):
+            newborn = False
+            newborn_count = 0
+            # We check for any newborn fish
+            if fishes[0] > 0:
+                newborn = True
+                newborn_count = fishes[0]
+
+            # We shift the array by 1
+            fishes.append(fishes.pop(0))
+            # We append newborns to the "7th day" cycle
+            if newborn == True:
+                fishes[6] = fishes[6] + newborn_count
+
+        # Tally up the fish
+        for fish in fishes:
+            self.counter += fish
 
     def __reset_counters(self):
         self.counter = 0
