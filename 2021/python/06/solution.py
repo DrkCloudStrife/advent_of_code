@@ -1,7 +1,7 @@
 import os
 from main import Solution
 
-input_file = "input_day01.txt"
+input_file = "input_day06.txt"
 path = os.path.dirname(os.path.realpath(__file__))
 file_data = open("{dir}/../../shared/{file}".format(dir=path, file=input_file))
 validator = Solution(file_data.read().splitlines())
