@@ -40,14 +40,14 @@ class Solution(object):
                     key = (nx,y)
                     self.__push_cover(key)
             else:
-                cover_d = [[0,0]] # np.concatenate(cover_x, cover_y)
+                for idx, nx in enumerate(cover_x):
+                    try:
+                        y = cover_y[idx]
+                        key = (nx, y)
+                        self.__push_cover(key)
+                    except:
+                        pass
 
-                for c in cover_d:
-                    cx, cy = c
-                    print(cx, cy)
-
-
-        self.__print_covers()
         self.counter = self.__get_overlap_count()
 
     def __format_lines(self):
@@ -59,12 +59,14 @@ class Solution(object):
             x2, y2 = [int(n) for n in input_2.split(',')]
             if x1 > x2:
                 cover_x = range(int(x2), int(x1)+1)
+                cover_x = [x for x in reversed(cover_x)]
                 if x1 > max_x: max_x = x1
             else:
                 cover_x = range(int(x1), int(x2)+1)
                 if x2 > max_x: max_x = x2
             if y1 > y2:
                 cover_y = range(int(y2), int(y1)+1)
+                cover_y = [y for y in reversed(cover_y)]
                 if y1 > max_y: max_y = y1
             else:
                 cover_y = range(int(y1), int(y2)+1)
