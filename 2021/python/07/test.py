@@ -18,4 +18,6 @@ print(validator.counter == 71)
 
 print("Solution validator matches?")
 validator.pt2()
-print(validator.counter == None)
+print(validator.counter == 168)
+validator.pt2(2)
+print(validator.counter == 206)
