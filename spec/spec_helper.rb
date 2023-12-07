@@ -44,8 +44,8 @@ RSpec.configure do |config|
   # triggering implicit auto-inclusion in groups with matching metadata.
   config.shared_context_metadata_behavior = :apply_to_host_groups
 
-  config.before do
-    allow($stdout).to receive(:puts)
-    allow($stdout).to receive(:write)
-  end
+  #config.before do
+    #allow($stdout).to receive(:puts)
+    #allow($stdout).to receive(:write)
+  #end
 end
